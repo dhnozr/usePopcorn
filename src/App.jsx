@@ -1,10 +1,12 @@
-import React from 'react';
-import Navbar from './components/Navbar';
+import { MoviesProvider } from './context/MoviesContext';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <>
-      <Navbar />
+      <MoviesProvider>
+        <Layout />
+      </MoviesProvider>
     </>
   );
 }
