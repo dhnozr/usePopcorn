@@ -12,6 +12,9 @@ const initialState = {
   isLoading: false, // Loading state to show a spinner or loading indicator
   error: '', // Error message for fetching data
   query: '', // Search query string
+  selectedMovie: {},
+  selectedId: null,
+  watchedMovies: JSON.parse(localStorage.getItem('watched')) || [],
 };
 
 // Reducer function to handle actions and update state accordingly
@@ -19,14 +22,35 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'loading':
       return { ...state, isLoading: true };
+    case 'loadingDetails':
+      return { ...state, isLoadingDetails: true };
+      break;
     case 'error':
       return { ...state, isLoading: false, error: action.payload };
     case 'dataReceived':
       return { ...state, isLoading: false, movies: action.payload, error: '' };
+      break;
+    case 'selectedId':
+      return { ...state, selectedId: action.payload };
+      break;
+    case 'movieFound':
+      return { ...state, selectedMovie: action.payload, LoadingDetails: false, error: '' };
     case 'noQuery':
-      return { ...initialState }; // Reset to initial state when no query is present
+      return { ...state, movies: [] }; // Reset to initial state when no query is present
     case 'querySearch':
       return { ...state, query: action.payload }; // Update the search query
+      break;
+    case 'addToList':
+      const addWatchedList = [...state.watchedMovies, action.payload];
+      localStorage.setItem('watched', JSON.stringify(addWatchedList));
+      return { ...state, watchedMovies: addWatchedList };
+      break;
+    case 'removeFromTheList':
+      const removedWatchedList = [...state.watchedMovies.filter(movie => movie.imdbID !== action.payload)];
+      localStorage.setItem('watched', JSON.stringify(removedWatchedList));
+      return { ...state, watchedMovies: removedWatchedList };
+    case 'closeMovie':
+      return { ...state, selectedId: null };
     default:
       throw new Error('Unknown action');
       return state;
@@ -35,7 +59,10 @@ const reducer = (state, action) => {
 
 // Provider component to encapsulate state logic and provide context to child components
 function MoviesProvider({ children }) {
-  const [{ movies, isLoading, error, query }, dispatch] = useReducer(reducer, initialState);
+  const [{ movies, isLoading, error, query, selectedId, selectedMovie, watchedMovies }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   // Effect to fetch movies based on search query
   useEffect(() => {
@@ -62,6 +89,29 @@ function MoviesProvider({ children }) {
     return () => controller.abort(); // Cleanup function to abort fetch when component unmounts or query changes
   }, [query]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchMovieDetails = async selectedId => {
+      dispatch({ type: 'loadingDetails' });
+      try {
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`, { signal: controller.signal });
+        const data = await res.json();
+        if (data.Response === 'False') throw new Error('Movie not Found!');
+        dispatch({ type: 'movieFound', payload: data });
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          dispatch({ type: 'error', payload: error.message });
+        }
+      }
+    };
+    if (selectedId) {
+      fetchMovieDetails(selectedId);
+    }
+
+    return () => controller.abort(); // Cleanup function to abort fetch when component unmounts or query changes
+  }, [selectedId]);
+
   // Provide context values to children
   return (
     <MoviesContext.Provider
@@ -71,6 +121,9 @@ function MoviesProvider({ children }) {
         dispatch,
         isLoading,
         error,
+        selectedId,
+        selectedMovie,
+        watchedMovies,
       }}
     >
       {children}
