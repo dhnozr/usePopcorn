@@ -3,7 +3,6 @@ import { useMovies } from '../context/MoviesContext';
 
 function MovieList() {
   const { movies } = useMovies();
-  console.log(movies);
   return (
     <ul className='list list-movies'>
       {movies?.map(movie => (
@@ -14,8 +13,9 @@ function MovieList() {
 }
 
 function Movie({ movie }) {
+  const { dispatch } = useMovies();
   return (
-    <li key={movie.imdbID}>
+    <li key={movie.imdbID} onClick={() => dispatch({ type: 'selectedId', payload: movie.imdbID })}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
