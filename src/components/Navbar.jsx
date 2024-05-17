@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMovies } from '../context/MoviesContext';
 
 function Navbar() {
   return (
@@ -20,13 +21,23 @@ function Logo() {
 }
 
 function Search() {
-  return <input type='text' className='search' placeholder='Search Movies...' />;
+  const { query, dispatch } = useMovies();
+  return (
+    <input
+      type='text'
+      className='search'
+      placeholder='Search Movies...'
+      value={query}
+      onChange={e => dispatch({ type: 'querySearch', payload: e.target.value })}
+    />
+  );
 }
 
 function NumOfResults() {
+  const { movies } = useMovies();
   return (
     <p className='num-results'>
-      Found <strong>x</strong>results
+      Found <strong>{movies.length}</strong> results
     </p>
   );
 }
