@@ -22,12 +22,13 @@ const reducer = (state, action) => {
     case 'error':
       return { ...state, isLoading: false, error: action.payload };
     case 'dataReceived':
-      return { ...state, isLoading: false, movies: action.payload };
+      return { ...state, isLoading: false, movies: action.payload, error: '' };
     case 'noQuery':
       return { ...initialState }; // Reset to initial state when no query is present
     case 'querySearch':
       return { ...state, query: action.payload }; // Update the search query
     default:
+      throw new Error('Unknown action');
       return state;
   }
 };
@@ -68,6 +69,8 @@ function MoviesProvider({ children }) {
         movies,
         query,
         dispatch,
+        isLoading,
+        error,
       }}
     >
       {children}
