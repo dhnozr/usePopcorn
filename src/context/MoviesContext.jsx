@@ -36,14 +36,16 @@ const reducer = (state, action) => {
     case 'movieFound':
       return { ...state, selectedMovie: action.payload, LoadingDetails: false, error: '' };
     case 'noQuery':
-      return { ...state, movies: [] }; // Reset to initial state when no query is present
+      return { ...state, movies: [], error: 'Search movies 🍿' }; // Reset to initial state when no query is present
     case 'querySearch':
       return { ...state, query: action.payload }; // Update the search query
       break;
     case 'addToList':
+      const same = state.watchedMovies.some(movie => movie.imdbID === action.payload.imdbID);
+      if (same) return { ...state, selectedId: null };
       const addWatchedList = [...state.watchedMovies, action.payload];
       localStorage.setItem('watched', JSON.stringify(addWatchedList));
-      return { ...state, watchedMovies: addWatchedList };
+      return { ...state, watchedMovies: addWatchedList, selectedId: null };
       break;
     case 'removeFromTheList':
       const removedWatchedList = [...state.watchedMovies.filter(movie => movie.imdbID !== action.payload)];
