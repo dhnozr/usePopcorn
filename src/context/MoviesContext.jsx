@@ -97,7 +97,9 @@ function MoviesProvider({ children }) {
     const fetchMovieDetails = async selectedId => {
       dispatch({ type: 'loadingDetails' });
       try {
-        const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`, { signal: controller.signal });
+        const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`, {
+          signal: controller.signal,
+        });
         const data = await res.json();
         if (data.Response === 'False') throw new Error('Movie not Found!');
         dispatch({ type: 'movieFound', payload: data });
