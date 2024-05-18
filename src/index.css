@@ -98,6 +98,49 @@ body {
   justify-content: center;
 }
 
+/* On screens that are 992px or less */
+
+@media screen and (max-width: 992px) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-bar {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .num-results {
+    font-size: 12px;
+  }
+
+  .search {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+  }
+
+  .logo h1 {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .nav-bar {
+    display: flex;
+    align-items: center;
+  }
+
+  .search {
+    flex: 1;
+  }
+  .logo h1 {
+    display: none;
+  }
+}
+
 .box {
   width: 42rem;
   max-width: 42rem;
