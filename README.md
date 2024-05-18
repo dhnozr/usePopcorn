@@ -2,7 +2,7 @@
 
 Movie Rating App is an interactive web application designed for movie to rate, discover, and track their favorite films. Leveraging real-time data from the IMDB API, the app offers a personalized watch lists, and a rating system.
 
-## Özellikler
+## Core Features
 
 - Real-time Movie Search: Utilize the IMDB API to search and retrieve real-time movie data.
 - Detailed Movie Information: Access extensive details such as posters, genres, durations, and IMDB ratings for each movie.
@@ -10,7 +10,7 @@ Movie Rating App is an interactive web application designed for movie to rate, d
 - Personal Watch List: Users can create and manage a list of their favorite movies.
 - User Ratings Feedback: View feedback on previously rated movies to recall past experiences and ratings.
 
-## Kullanılan Teknolojiler
+## Technologies Used
 
 **React:** For building a dynamic and responsive UI.
 
