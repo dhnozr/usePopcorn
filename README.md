@@ -2,6 +2,11 @@
 
 Movie Rating App is an interactive web application designed for movie to rate, discover, and track their favorite films. Leveraging real-time data from the IMDB API, the app offers a personalized watch lists, and a rating system.
 
+<video autoplay loop muted src="https://github.com/dhnozr/usePopcorn/assets/115792609/3413dde7-342c-4101-a8cf-971bedd11109"/>
+
+
+
+
 ## Core Features
 
 - Real-time Movie Search: Utilize the IMDB API to search and retrieve real-time movie data.
